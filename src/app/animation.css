@@ -1,0 +1,129 @@
+/* ===== Portfolio animations: keep this file at app/animations.css (page.tsx imports it) ===== */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: none; }
+}
+/* "Hello, I'm" slides up out of an invisible mask */
+@keyframes mask-up {
+  from { transform: translateY(105%); }
+  to   { transform: none; }
+}
+/* Each letter of the name rises, scales and comes into focus */
+@keyframes letter-in {
+  from { opacity: 0; transform: translateY(0.6em) scale(0.9); filter: blur(10px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+/* A light sweeps across the name from left to right, then rests */
+@keyframes light-sweep {
+  0%   { color: #a855f7; text-shadow: none; }
+  15%  { color: #f6ecff; text-shadow: 0 0 28px rgba(192, 132, 252, 0.9); }
+  35%  { color: #a855f7; text-shadow: none; }
+  100% { color: #a855f7; text-shadow: none; }
+}
+/* Underline draws itself under the name */
+@keyframes draw-line {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.12); }
+}
+@keyframes ring {
+  0%   { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.55); }
+  100% { box-shadow: 0 0 0 18px rgba(147, 51, 234, 0); }
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.anim-nav {
+  animation: slide-down 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.anim-up {
+  animation: fade-up 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.hello-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.mask-in {
+  display: block;
+  animation: mask-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.name-letter {
+  animation:
+    letter-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards,
+    light-sweep 4.5s ease-in-out infinite;
+  animation-delay:
+    calc(var(--i) * 55ms + 450ms),
+    calc(var(--i) * 90ms + 2s);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Letters lift slightly when the mouse passes over them */
+.name-letter:hover {
+  transform: translateY(-0.12em);
+}
+.name-line {
+  display: block;
+  width: min(60%, 260px);
+  height: 4px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #9333ea, #e879f9);
+  transform-origin: left;
+  animation: draw-line 1s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both;
+}
+.anim-float      { animation: float 5s ease-in-out infinite; }
+.anim-float-slow { animation: float 6s ease-in-out 1s infinite; }
+.anim-glow       { animation: pulse-glow 4s ease-in-out infinite; }
+.anim-ring       { animation: ring 2s ease-out infinite; }
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  background: currentColor;
+  vertical-align: text-bottom;
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Scroll reveal (used by the Reveal component) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Respect people who turn animations off in their system settings */
+@media (prefers-reduced-motion: reduce) {
+  .anim-nav, .anim-up, .mask-in, .name-letter, .name-line, .anim-float,
+  .anim-float-slow, .anim-glow, .anim-ring, .caret {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
